@@ -1,5 +1,5 @@
 <template>
-    <YangArchvizComponent :gltfUrl='GLTFTest' debug ref="yangArchvizComp" />
+    <YangArchvizComponent :gltfUrl='GLTFTest' debug ref="yangArchvizComp" :modelValue="screenPositions" @update:modelValue="handleModelWValueChange"/>
 </template>
 
 <script setup lang="ts">
@@ -10,9 +10,13 @@ import { onMounted, ref } from 'vue';
 
 let yangArchvizComp = ref<YangArchvizPublicInterface>();
 
-onMounted(()=>{
-  
+let screenPositions = ref();
+
+onMounted(()=>{  
 });
+
+let handleModelWValueChange = (value : Vector2[]) => { 
+}
 
 </script>
 

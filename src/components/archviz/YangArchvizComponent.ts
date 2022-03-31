@@ -16,10 +16,12 @@ export default defineComponent({
     props: {
         gltfUrl : String,
         debug : Boolean,
-    },
+        "modelValue" : String,
+    }, 
+    emits: ['update:modelValue'], 
     components: { },
     setup(props, ctx){
-        const { slots, expose } = ctx;
+        const { slots, expose, emit } = ctx;
         const { gltfUrl } = props;
         const url : String = gltfUrl ?? "";  
         const ProjectMeshPosToUIRef = ref<ProjectMeshPosToUIPublicInterface>();
@@ -28,6 +30,12 @@ export default defineComponent({
 
         onMounted(()=>{
             screenPositions = ProjectMeshPosToUIRef?.value?.cacheMeshScreenPos ?? [];
+            console.log("screenPositions", screenPositions);
+
+            setTimeout(() => {
+            console.log("screenPositions", screenPositions);
+                
+            }, 600);
         });
 
         const instance : YangArchvizSetupInterface = {screenPositions};
@@ -51,7 +59,11 @@ export default defineComponent({
                         debug : props.debug,
                     },  () => 
                     [
-                        h(ProjectMeshPosToUI, { ref : ProjectMeshPosToUIRef} ),
+                        h(ProjectMeshPosToUI, { 
+                            ref : ProjectMeshPosToUIRef, 
+                            modelValue: screenPositions,
+                            "onUpdate:modelValue" : (value : Vector2[]) => emit("update:modelValue", value)
+                        }),
                     ]),
                     slots.default?.() ?? [],
                 ])

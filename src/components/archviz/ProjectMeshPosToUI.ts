@@ -1,5 +1,5 @@
 import { Camera, Group, Mesh, Vector2, Vector3 } from "three";
-import { defineComponent, inject } from "vue";
+import { defineComponent, inject, PropType } from "vue";
 import { RendererInjectionKey, RendererPublicInterface } from "../../core";
 import {  RenderEventInterface } from "../../core/Renderer";
 import { YangGLTFInjectionKey, YangGLTFPublicInterface } from "../../models/YangGLTF";
@@ -17,6 +17,8 @@ export interface ProjectMeshPosToUIPublicInterface extends ProjectMeshPosToUISet
 
 export default defineComponent({
     name: "ProjectMeshPosToUI",
+    props: ['modelValue'],
+    emits: ['update:modelValue'],
     setup(props) : ProjectMeshPosToUISetupInterface {
       // TODO use props instead of inject
       const yangGltf : YangGLTFPublicInterface = inject(YangGLTFInjectionKey) as YangGLTFPublicInterface;
@@ -90,7 +92,7 @@ export default defineComponent({
           return this.ProjectWorldPosToScreenPos(mesh);
         }); 
 
-        this.$emit("screenPosUpdate", this.cacheMeshScreenPos);
+        this.$emit("update:modelValue", this.cacheMeshScreenPos);
       }
     },
     render(){
