@@ -11,7 +11,7 @@ export default defineComponent({
         debug : Boolean,
     },
     components: { },
-    setup(props : any, ctx : any) {
+    setup(props, ctx) {
         const { slots, expose } = ctx;
         const { gltfUrl } = props;
         const url : String = gltfUrl ?? "";  
@@ -22,28 +22,28 @@ export default defineComponent({
         expose({ });
 
         return () =>h( Renderer, {  
-                        resize : "window" ,  
-                        alpha : true
-                    }, () => 
+            resize : "window" ,  
+            alpha : true
+        }, () => 
+        [
+            h( PerspectiveCamera, {
+                position: { z: 10 }
+            }, () => 
+            [ 
+                h( Scene , {}, () =>
+                [ 
+                    h( AmbientLight ),
+                    //@ts-ignore
+                    h( YangGLTF, {
+                        src : url,
+                        debug : props.debug,
+                    },  () => 
                     [
-                        h( PerspectiveCamera, {
-                            position: { z: 10 }
-                        }, () => 
-                        [ 
-                            h( Scene , {}, () =>
-                            [ 
-                                h( AmbientLight ),
-                                //@ts-ignore
-                                h( YangGLTF, {
-                                    src : url,
-                                    debug : props.debug,
-                                },  () => 
-                                [
-                                    h(ProjectMeshPosToUI ),
-                                ]),
-                                slots.default?.() ?? [],
-                            ])
-                        ]), 
-                    ]);
+                        h(ProjectMeshPosToUI ),
+                    ]),
+                    slots.default?.() ?? [],
+                ])
+            ]), 
+        ]);
     },
 });
