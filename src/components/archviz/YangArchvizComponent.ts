@@ -1,4 +1,4 @@
-import { defineComponent, h } from "vue";
+import { defineComponent, h, onMounted } from "vue";
 import { PerspectiveCamera, Renderer, Scene } from "../../core";
 import { AmbientLight } from "../../lights";
 import { YangGLTF } from "../../models";
@@ -11,9 +11,16 @@ export default defineComponent({
         debug : Boolean,
     },
     components: { },
-    setup(props, { slots, expose }){
-        const url : String = props.gltfUrl ?? "";
- 
+    setup(props : any, ctx : any) {
+        const { slots, expose } = ctx;
+        const { gltfUrl } = props;
+        const url : String = gltfUrl ?? "";  
+
+        onMounted(()=>{
+        });
+
+        expose({ });
+
         return () =>h( Renderer, {  
                         resize : "window" ,  
                         alpha : true
@@ -32,11 +39,11 @@ export default defineComponent({
                                     debug : props.debug,
                                 },  () => 
                                 [
-                                    h(ProjectMeshPosToUI)
+                                    h(ProjectMeshPosToUI ),
                                 ]),
                                 slots.default?.() ?? [],
                             ])
                         ]), 
                     ]);
-    }, 
+    },
 });

@@ -1,7 +1,7 @@
 import { Camera, Group, Mesh, Vector2, Vector3 } from "three";
 import { defineComponent, inject } from "vue";
 import { RendererInjectionKey, RendererPublicInterface } from "../../core";
-import { RendererInterface, RenderEventInterface } from "../../core/Renderer";
+import {  RenderEventInterface } from "../../core/Renderer";
 import { YangGLTFInjectionKey, YangGLTFPublicInterface } from "../../models/YangGLTF";
 
 export interface ProjectMeshPosToUISetupInterface {
