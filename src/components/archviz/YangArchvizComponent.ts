@@ -5,8 +5,7 @@ import { AmbientLight } from "../../lights";
 import { YangGLTF } from "../../models";
 import ProjectMeshPosToUI, { ProjectMeshPosToUIPublicInterface } from "./ProjectMeshPosToUI";
 
-export interface YangArchvizSetupInterface {
-    screenPositions : Vector2[];
+export interface YangArchvizSetupInterface { 
 } 
 
 export interface YangArchvizPublicInterface extends ComponentPublicInstance, YangArchvizSetupInterface{}
@@ -24,21 +23,13 @@ export default defineComponent({
         const { slots, expose, emit } = ctx;
         const { gltfUrl } = props;
         const url : String = gltfUrl ?? "";  
-        const ProjectMeshPosToUIRef = ref<ProjectMeshPosToUIPublicInterface>();
-    
-        let screenPositions : Vector2[] = [];
+        const ProjectMeshPosToUIRef = ref<ProjectMeshPosToUIPublicInterface>(); 
+        let screenPositions : Vector2[] = ref();
 
         onMounted(()=>{
-            screenPositions = ProjectMeshPosToUIRef?.value?.cacheMeshScreenPos ?? [];
-            console.log("screenPositions", screenPositions);
-
-            setTimeout(() => {
-            console.log("screenPositions", screenPositions);
-                
-            }, 600);
         });
 
-        const instance : YangArchvizSetupInterface = {screenPositions};
+        const instance : YangArchvizSetupInterface = {};
         expose(instance);
 
         return () =>h( Renderer, {  
