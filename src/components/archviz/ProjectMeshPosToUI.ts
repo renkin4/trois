@@ -1,12 +1,16 @@
 import { Camera, Group, Mesh, Vector2, Vector3 } from "three";
 import { defineComponent, inject } from "vue";
 import { RendererInjectionKey, RendererPublicInterface } from "../../core";
+import { RendererInterface, RenderEventInterface } from "../../core/Renderer";
 import { YangGLTFInjectionKey, YangGLTFPublicInterface } from "../../models/YangGLTF";
 
 export interface ProjectMeshPosToUISetupInterface {
   allMesh : Promise<Mesh[]>;
   allMeshScreenPos : Promise<Vector2[]>;
+  cachedMesh : Mesh[],
+  cacheMeshScreenPos : Vector2[],
   renderer : RendererPublicInterface;
+  ProjectWorldPosToScreenPos : (mesh : Mesh) => Vector2;
 }
 
 export interface ProjectMeshPosToUIPublicInterface {}
@@ -37,7 +41,7 @@ export default defineComponent({
         });
       });
 
-      let ProjectWorldPosToScreenPos  = (mesh : Mesh) => {
+      let ProjectWorldPosToScreenPos = (mesh : Mesh) => {
         const camera : Camera = renderer!.camera as Camera;
         const vector = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
         vector.project(camera);
@@ -53,25 +57,39 @@ export default defineComponent({
         return returnVal;
       }
 
-      const allMeshScreenPos : Promise<Vector2[]> = allMesh.then((meshArray) => {
+      let allMeshScreenPos : Promise<Vector2[]> = allMesh.then((meshArray) => {
         return Promise.all(meshArray.map((mesh) => {
           return ProjectWorldPosToScreenPos(mesh);
         }));
       });
 
+      const cachedMesh : Mesh[] = [];
+      const cacheMeshScreenPos : Vector2[] = [];
+
       return {
         allMesh,
         allMeshScreenPos,
-        renderer
+        renderer,
+        ProjectWorldPosToScreenPos,
+        cachedMesh,
+        cacheMeshScreenPos,
       };
     },
-    mounted() {
-      console.log(this.renderer);
+    async mounted() {
+      this.cachedMesh = await this.allMesh;
+      this.updateMeshScreenPositions();
+
+      this.renderer.beforeRenderCallbacks.push(this.beforeRender);
     },
     methods : {
-      beforeRender(){
-
+      beforeRender( props : RenderEventInterface){
+        
       },
+      updateMeshScreenPositions(){
+        this.cacheMeshScreenPos = this.cachedMesh.map((mesh) => {
+          return this.ProjectWorldPosToScreenPos(mesh);
+        });
+      }
     },
     render(){
       return this.$slots.default ? this.$slots.default() : []
