@@ -1,10 +1,18 @@
 <template>
-    <YangArchvizComponent :gltfUrl='GLTFTest' debug />
+    <YangArchvizComponent :gltfUrl='GLTFTest' debug ref="yangArchvizComp" />
 </template>
 
 <script setup lang="ts">
-import YangArchvizComponent from './components/archviz/YangArchvizComponent' 
+import YangArchvizComponent, { YangArchvizPublicInterface } from './components/archviz/YangArchvizComponent' 
 import GLTFTest from './assets/podium_hitbox_v3.gltf'
+import { Vector2 } from 'three';
+import { onMounted, ref } from 'vue';
+
+let yangArchvizComp = ref<YangArchvizPublicInterface>();
+
+onMounted(()=>{
+  
+});
 
 </script>
 

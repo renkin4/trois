@@ -13,7 +13,7 @@ export interface ProjectMeshPosToUISetupInterface {
   ProjectWorldPosToScreenPos : (mesh : Mesh) => Vector2;
 }
 
-export interface ProjectMeshPosToUIPublicInterface {}
+export interface ProjectMeshPosToUIPublicInterface extends ProjectMeshPosToUISetupInterface {}
 
 export default defineComponent({
     name: "ProjectMeshPosToUI",
@@ -89,6 +89,8 @@ export default defineComponent({
         this.cacheMeshScreenPos = this.cachedMesh.map((mesh) => {
           return this.ProjectWorldPosToScreenPos(mesh);
         }); 
+
+        this.$emit("screenPosUpdate", this.cacheMeshScreenPos);
       }
     },
     render(){

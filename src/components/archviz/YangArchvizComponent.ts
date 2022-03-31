@@ -1,8 +1,15 @@
-import { defineComponent, h, onMounted } from "vue";
+import { Vector2 } from "three";
+import { ComponentPublicInstance, defineComponent, h, onMounted, ref } from "vue";
 import { PerspectiveCamera, Renderer, Scene } from "../../core";
 import { AmbientLight } from "../../lights";
 import { YangGLTF } from "../../models";
-import ProjectMeshPosToUI from "./ProjectMeshPosToUI";
+import ProjectMeshPosToUI, { ProjectMeshPosToUIPublicInterface } from "./ProjectMeshPosToUI";
+
+export interface YangArchvizSetupInterface {
+    screenPositions : Vector2[];
+} 
+
+export interface YangArchvizPublicInterface extends ComponentPublicInstance, YangArchvizSetupInterface{}
 
 export default defineComponent({
     name: "YangArchvizComponent",
@@ -11,17 +18,20 @@ export default defineComponent({
         debug : Boolean,
     },
     components: { },
-    setup(props, ctx) {
+    setup(props, ctx){
         const { slots, expose } = ctx;
         const { gltfUrl } = props;
         const url : String = gltfUrl ?? "";  
+        const ProjectMeshPosToUIRef = ref<ProjectMeshPosToUIPublicInterface>();
+    
+        let screenPositions : Vector2[] = [];
 
         onMounted(()=>{
-            setTimeout(() => {
-            }, 500);
+            screenPositions = ProjectMeshPosToUIRef?.value?.cacheMeshScreenPos ?? [];
         });
 
-        expose({ });
+        const instance : YangArchvizSetupInterface = {screenPositions};
+        expose(instance);
 
         return () =>h( Renderer, {  
             resize : "window" ,  
@@ -41,7 +51,7 @@ export default defineComponent({
                         debug : props.debug,
                     },  () => 
                     [
-                        h(ProjectMeshPosToUI ),
+                        h(ProjectMeshPosToUI, { ref : ProjectMeshPosToUIRef} ),
                     ]),
                     slots.default?.() ?? [],
                 ])
