@@ -90,16 +90,19 @@ export default defineComponent({
         this.scenePromiseResolve(this.gltfScene);
         this.animationPromiseResolve(this.gltfAnimation);
 
-        this.renderer!.camera = gltfCamera;
-
+        this.renderer!.camera = gltfCamera; 
+        this.renderer!.three.forceResize();
+        
         this.initObject3D(gltf.scene);
-      }, this.onProgress, this.onError)
+      }, this.onProgress, (error : ErrorEvent) => { this.onError(error); });
     },  
     methods:{
       onError(error: ErrorEvent) {
         super.onError(error);
-        this.scenePromiseReject(error);
-        this.animationPromiseReject(error);
+        //@ts-ignore
+        this.scenePromiseReject("GLTF Load Error");
+        //@ts-ignore
+        this.animationPromiseReject("GLTF Load Error");
       },
     },
     render(){

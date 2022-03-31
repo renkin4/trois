@@ -39,6 +39,7 @@ export interface ThreeInterface {
   dispose(): void
   render(): void
   renderC(): void
+  forceResize() : void
   setSize(width: number, height: number): void
   addIntersectObject(o: Object3D): void
   removeIntersectObject(o: Object3D): void
@@ -89,6 +90,7 @@ export default function useThree(params: ThreeConfigInterface): ThreeInterface {
     render,
     renderC,
     setSize,
+    forceResize,
     addIntersectObject, removeIntersectObject,
   }
 
@@ -241,6 +243,14 @@ export default function useThree(params: ThreeConfigInterface): ThreeInterface {
   }
 
   /**
+   * Force rendere and camera to resize 
+   */
+  function forceResize() {
+    onResize();
+  }
+
+
+  /**
    * update renderer size and camera
    */
   function setSize(width: number, height: number) {
@@ -256,7 +266,7 @@ export default function useThree(params: ThreeConfigInterface): ThreeInterface {
     // }
 
     const camera = (<Camera>obj.camera!)
-    if (camera.type === 'PerspectiveCamera') {
+    if (camera.type === 'PerspectiveCamera') { 
       const pCamera = (<PerspectiveCamera>camera)
       pCamera.aspect = size.ratio
       pCamera.updateProjectionMatrix()

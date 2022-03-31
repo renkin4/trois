@@ -2,6 +2,7 @@ import { defineComponent, h } from "vue";
 import { PerspectiveCamera, Renderer, Scene } from "../../core";
 import { AmbientLight } from "../../lights";
 import { YangGLTF } from "../../models";
+import ProjectMeshPosToUI from "./ProjectMeshPosToUI";
 
 export default defineComponent({
     name: "YangArchvizComponent",
@@ -29,7 +30,11 @@ export default defineComponent({
                                 h( YangGLTF, {
                                     src : url,
                                     debug : props.debug,
-                                }, () => slots.default?.() ?? [] )
+                                },  () => 
+                                [
+                                    h(ProjectMeshPosToUI)
+                                ]),
+                                slots.default?.() ?? [],
                             ])
                         ]), 
                     ]);
