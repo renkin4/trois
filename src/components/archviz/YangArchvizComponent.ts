@@ -17,6 +17,8 @@ export default defineComponent({
         const url : String = gltfUrl ?? "";  
 
         onMounted(()=>{
+            setTimeout(() => {
+            }, 500);
         });
 
         expose({ });

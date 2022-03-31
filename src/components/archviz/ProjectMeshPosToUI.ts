@@ -82,13 +82,13 @@ export default defineComponent({
       this.renderer.beforeRenderCallbacks.push(this.beforeRender);
     },
     methods : {
-      beforeRender( props : RenderEventInterface){
-        
+      beforeRender( props : RenderEventInterface) {
+        this.updateMeshScreenPositions();
       },
       updateMeshScreenPositions(){
         this.cacheMeshScreenPos = this.cachedMesh.map((mesh) => {
           return this.ProjectWorldPosToScreenPos(mesh);
-        });
+        }); 
       }
     },
     render(){
