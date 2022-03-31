@@ -8,6 +8,7 @@ export * from './meshes/index'
 export * from './models/index'
 export * from './effects/index'
 export { default as YangArchvizComponent} from './components/archviz/YangArchvizComponent'
+export { default as ProjectPositionTo2DUI } from './components/archviz/ProjectPositionTo2DUI'
 
 // export * from './components/index'
 
